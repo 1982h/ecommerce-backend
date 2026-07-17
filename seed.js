@@ -1,12 +1,23 @@
+// تحميل متغيرات البيئة من ملف .env
 require('dotenv').config();
+
+// استيراد مكتبة Mongoose للتعامل مع MongoDB
 const mongoose = require('mongoose');
+
+// استيراد نموذج (Model) المنتجات
 const Product = require('./models/Product');
 
+// الاتصال بقاعدة بيانات MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
+
+  // في حالة نجاح الاتصال
   .then(() => console.log('MongoDB Connected'))
+
+  // في حالة فشل الاتصال
   .catch(err => console.log(err));
 
+// بيانات المنتجات التي سيتم إضافتها إلى قاعدة البيانات
 const products = [
   {
     title: "The Dark Knight",
@@ -80,19 +91,30 @@ const products = [
   }
 ];
 
+// دالة لإضافة البيانات التجريبية (Seed Data) إلى قاعدة البيانات
 const seedDB = async () => {
   try {
+
+    // حذف جميع المنتجات القديمة من قاعدة البيانات
     await Product.deleteMany();
     console.log("Old Products Deleted");
 
+    // إضافة جميع المنتجات الموجودة في المصفوفة
     await Product.insertMany(products);
     console.log("Products Inserted Successfully");
 
+    // إنهاء البرنامج بعد نجاح العملية
     process.exit();
+
   } catch (err) {
+
+    // طباعة الخطأ إذا حدثت مشكلة أثناء الحذف أو الإضافة
     console.log(err);
+
+    // إنهاء البرنامج مع الإشارة إلى وجود خطأ
     process.exit(1);
   }
 };
 
+// استدعاء الدالة لبدء عملية إدخال البيانات
 seedDB();

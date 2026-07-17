@@ -1,11 +1,24 @@
 const mongoose = require('mongoose');
 
-const connectDB = async () => { 
-    try{
+// دالة للاتصال بقاعدة بيانات MongoDB       
+const connectDB = async () => {
+    try {
+
+        // الاتصال بقاعدة البيانات باستخدام الرابط الموجود في ملف .env
         const conn = await mongoose.connect(process.env.MONGO_URI);
-        console.log(`mongoDB connect :${conn.connection.host}`);
-    }catch(err){
+
+        // طباعة رسالة نجاح الاتصال مع اسم الـ Host
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+
+    } catch (err) {
+
+        // طباعة الخطأ في حالة فشل الاتصال
         console.log(err);
+
+        // إيقاف تشغيل السيرفر لأن قاعدة البيانات لم تتصل
         process.exit(1);
-    }};
-  module.exports = connectDB;  
+    }
+};
+
+// تصدير الدالة لاستخدامها في app.js
+module.exports = connectDB;
